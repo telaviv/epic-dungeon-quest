@@ -12,17 +12,8 @@
 (defn passive-enemy [health]
   {:health 100, :type :monster})
 
-(defn health [card]
-  (:health card))
-
-(defn abilities [card]
-  (:abilities card))
-
 (defn spider-card []
   {:type :monster, :health 20})
 
 (defn wooden-sword-card []
   {:type :weapon, :abilities [(attack :single-enemy 5)]})
-
-(defn card-type [card]
-  (:type card))
