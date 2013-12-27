@@ -11,3 +11,12 @@
           action (attack :single-enemy 30)
           attacked-enemy (action enemy)]
       (is (= 70 (health attacked-enemy))))))
+
+(deftest spider
+  (let [spider (spider-card)]
+    (testing "should be of type monster"
+      (is (= :monster (card-type spider))))
+    (testing "should have positive health"
+      (let [spider-health (health spider)]
+        (is (number? spider-health))
+        (is (< 0 spider-health))))))

@@ -10,7 +10,13 @@
       (deal-damage damage card))))
 
 (defn passive-enemy [health]
-  {:health 100})
+  {:health 100, :type :monster})
 
 (defn health [card]
   (:health card))
+
+(defn spider-card []
+  {:type :monster, :health 20})
+
+(defn card-type [card]
+  (:type card))
