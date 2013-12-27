@@ -1,6 +1,16 @@
 (ns epic-dungeon-quest.core)
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn deal-damage [damage card]
+  (assoc card :health (- (:health card) damage)))
+
+(defn attack [target-type damage]
+  (fn [card]
+    (if (= card :target-type)
+      target-type
+      (deal-damage damage card))))
+
+(defn passive-enemy [health]
+  {:health 100})
+
+(defn health [card]
+  (:health card))
