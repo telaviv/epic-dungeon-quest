@@ -4,7 +4,7 @@
               [lanterna.screen :as ls]))
 
 (defn -main []
-  (let [screen (ls/get-screen :unix)]
+  (let [screen (ls/get-screen :text)]
     (ls/start screen)
     (ls/put-sheet screen 0 0 (draw/draw-card (epic/spider-card)))
     (ls/redraw screen)
