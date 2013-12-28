@@ -6,7 +6,7 @@
 (defn height [buffer] (count buffer))
 
 (deftest test-draw-card
-  (let [card {:name "Pickachu"}
+  (let [card {:name "Pikachu"}
         buffer (draw-card card)]
     (testing "size should be 16x12"
       (is (= 16 (width buffer))
@@ -15,4 +15,7 @@
       (is (= "╭" (get-in buffer [0 0])))
       (is (= "╮" (get-in buffer [0 15]))
       (is (= "╰" (get-in buffer [11 0]))
-      (is (= "╯" (get-in buffer [11 15]))))))))
+      (is (= "╯" (get-in buffer [11 15]))))))
+    (testing "it should have unicode box sides."
+      (let [left (for [x (range 1 11)] (get-in buffer [x 0]))]
+        (is (apply = (conj left "│")))))))
