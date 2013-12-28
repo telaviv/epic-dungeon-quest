@@ -18,6 +18,10 @@
       (is (= "╯" (get-in buffer [11 15]))))))
     (testing "it should have unicode box sides."
       (let [left (for [y (range 1 11)] (get-in buffer [y 0]))
-            right (for [y (range 1 11)] (get-in buffer [y 15]))]
+            right (for [y (range 1 11)] (get-in buffer [y 15]))
+            top (for [x (range 1 15)] (get-in buffer [0 x]))
+            bottom (for [x (range 1 15)] (get-in buffer [11 x]))]
         (is (apply = (conj left "│")))
-        (is (apply = (conj right "│")))))))
+        (is (apply = (conj right "│")))
+        (is (apply = (conj top "─")))
+        (is (apply = (conj bottom "─")))))))
