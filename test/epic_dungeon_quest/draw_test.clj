@@ -17,5 +17,7 @@
       (is (= "╰" (get-in buffer [11 0]))
       (is (= "╯" (get-in buffer [11 15]))))))
     (testing "it should have unicode box sides."
-      (let [left (for [x (range 1 11)] (get-in buffer [x 0]))]
-        (is (apply = (conj left "│")))))))
+      (let [left (for [y (range 1 11)] (get-in buffer [y 0]))
+            right (for [y (range 1 11)] (get-in buffer [y 15]))]
+        (is (apply = (conj left "│")))
+        (is (apply = (conj right "│")))))))

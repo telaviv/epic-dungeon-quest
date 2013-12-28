@@ -13,6 +13,7 @@
 (defn draw-card [card]
   (-> (create-sheet card-width card-height)
       (draw-column 0 "│")
+      (draw-column (dec card-width) "│")
       (assoc-in [0 0] "╭")
       (assoc-in [0 15] "╮")
       (assoc-in [11 0] "╰")
