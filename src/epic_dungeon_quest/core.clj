@@ -13,7 +13,7 @@
   {:health 100, :type :monster})
 
 (defn spider-card []
-  {:type :monster, :health 20})
+  {:type :monster, :health 20, :name "Spider"})
 
 (defn wooden-sword-card []
   {:type :weapon, :abilities [(attack :single-enemy 5)]})

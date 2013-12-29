@@ -1,4 +1,5 @@
-(ns epic-dungeon-quest.draw)
+(ns epic-dungeon-quest.draw
+  (:require [clojure.math.numeric-tower :as math]))
 
 (def card-width 16)
 (def card-height 12)
@@ -6,6 +7,7 @@
 (def card-right (dec card-width))
 (def card-top 0)
 (def card-bottom (dec card-height))
+(def card-name-row 2)
 
 (defn create-sheet [w h]
   (vec (repeat h (vec (repeat w " ")))))
@@ -19,8 +21,23 @@
   (let [width (count (sheet row))]
     (assoc sheet row (vec (repeat width char)))))
 
+(defn center-string [sheet string row]
+  (let [sheet-width (count (sheet row))
+        str-width (count string)
+        row-array (sheet row)
+        padding (- sheet-width str-width)
+        left-padding (math/floor (/ padding 2))
+        right-padding (- padding left-padding)]
+    (println left-padding right-padding)
+    (assoc sheet row
+      (vec
+       (concat (take left-padding row-array)
+               (map str (vec string))
+               (take-last right-padding row-array))))))
+
 (defn draw-card [card]
   (-> (create-sheet card-width card-height)
+      (center-string (:name card) card-name-row)
       (draw-column card-left "│")
       (draw-column card-right "│")
       (draw-row card-top "─")

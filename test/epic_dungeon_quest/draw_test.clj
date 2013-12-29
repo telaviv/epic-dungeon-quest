@@ -24,4 +24,7 @@
         (is (apply = (conj left "│")))
         (is (apply = (conj right "│")))
         (is (apply = (conj top "─")))
-        (is (apply = (conj bottom "─")))))))
+        (is (apply = (conj bottom "─")))))
+    (testing "it should draw it's name."
+      (let [name-buffer (->> (nth buffer 2) rest drop-last (apply str))]
+        (is (= "   Pikachu    " name-buffer))))))

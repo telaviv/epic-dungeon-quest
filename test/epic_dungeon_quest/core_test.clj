@@ -2,7 +2,7 @@
   (:require [clojure.test :refer :all]
             [epic-dungeon-quest.core :refer :all]))
 
-(deftest attacking
+(deftest test-attacking
   (testing "target type"
     (let [ability (attack :single-enemy 30)]
       (is (= :single-enemy (ability :target-type)))))
@@ -12,16 +12,19 @@
           attacked-enemy (ability enemy)]
       (is (= 70 (:health attacked-enemy))))))
 
-(deftest spider
+(deftest test-spider
   (let [spider (spider-card)]
     (testing "should be of type monster"
       (is (= :monster (:type spider))))
+    (testing "it should have a name"
+      (is (string? (:name spider))))
     (testing "should have positive health"
       (let [spider-health (:health spider)]
         (is (number? spider-health))
         (is (< 0 spider-health))))))
 
-(deftest wooden-sword
+
+(deftest test-wooden-sword
   (let [sword (wooden-sword-card)]
     (testing "is of type weapon"
       (is (= :weapon (:type sword))))
