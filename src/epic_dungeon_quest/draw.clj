@@ -7,7 +7,8 @@
 (def card-right (dec card-width))
 (def card-top 0)
 (def card-bottom (dec card-height))
-(def card-name-row 2)
+(def card-name-row 3)
+(def card-health-row 1)
 
 (defn create-sheet [w h]
   (vec (repeat h (vec (repeat w " ")))))
@@ -28,16 +29,23 @@
         padding (- sheet-width str-width)
         left-padding (math/floor (/ padding 2))
         right-padding (- padding left-padding)]
-    (println left-padding right-padding)
     (assoc sheet row
-      (vec
-       (concat (take left-padding row-array)
-               (map str (vec string))
-               (take-last right-padding row-array))))))
+      (vec (concat (take left-padding row-array)
+                   (map str (vec string))
+                   (take-last right-padding row-array))))))
+
+(defn right-align-string [sheet string row]
+  (let [str-width (count string)
+        row-array (sheet row)]
+    (assoc sheet row
+      (vec (concat (drop-last (+ 2 str-width) row-array)
+                   (map str (vec string))
+                   (take-last 2 row-array))))))
 
 (defn draw-card [card]
   (-> (create-sheet card-width card-height)
       (center-string (:name card) card-name-row)
+      (right-align-string (str (:health card) "☗") card-health-row)
       (draw-column card-left "│")
       (draw-column card-right "│")
       (draw-row card-top "─")
