@@ -21,8 +21,11 @@
     (testing "should have positive health"
       (let [spider-health (:health spider)]
         (is (number? spider-health))
-        (is (< 0 spider-health))))))
-
+        (is (< 0 spider-health))))
+    (testing "should have a positive attack."
+      (let [spider-attack (:attack spider)]
+        (is (number? spider-attack))
+        (is (< 0 spider-attack))))))
 
 (deftest test-wooden-sword
   (let [sword (wooden-sword-card)]

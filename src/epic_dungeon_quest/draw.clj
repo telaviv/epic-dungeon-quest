@@ -13,20 +13,23 @@
 (defn create-sheet [w h]
   (vec (repeat h (vec (repeat w " ")))))
 
+(defn sheet-width [sheet] (count (first sheet)))
+(defn sheet-height [sheet] (count sheet))
+
 (defn draw-column [sheet column char]
-  (let [height (count sheet)
+  (let [height (sheet-height sheet)
         positions (for [x (range height)] [x column])]
     (reduce #(assoc-in %1 %2 char) sheet positions)))
 
 (defn draw-row [sheet row char]
-  (let [width (count (sheet row))]
+  (let [width (sheet-width sheet)]
     (assoc sheet row (vec (repeat width char)))))
 
 (defn center-string [sheet string row]
-  (let [sheet-width (count (sheet row))
+  (let [width (sheet-width sheet)
         str-width (count string)
         row-array (sheet row)
-        padding (- sheet-width str-width)
+        padding (- width str-width)
         left-padding (math/floor (/ padding 2))
         right-padding (- padding left-padding)]
     (assoc sheet row
@@ -42,9 +45,18 @@
                    (map str (vec string))
                    (take-last 2 row-array))))))
 
+(defn left-align-string [sheet string row]
+  (let [str-width (count string)
+        row-array (sheet row)]
+    (assoc sheet row
+      (vec (concat (take 1 row-array)
+                   (map str (vec string))
+                   (drop (+ 1 str-width) row-array))))))
+
 (defn draw-card [card]
   (-> (create-sheet card-width card-height)
       (center-string (:name card) card-name-row)
+      (left-align-string (str (:attack card) "⚔") card-health-row)
       (right-align-string (str (:health card) "☗") card-health-row)
       (draw-column card-left "│")
       (draw-column card-right "│")

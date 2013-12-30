@@ -6,7 +6,7 @@
 (defn height [buffer] (count buffer))
 
 (deftest test-draw-card
-  (let [card {:name "Pikachu" :health 100}
+  (let [card {:name "Pikachu" :health 100 :attack 20}
         buffer (draw-card card)]
     (testing "size should be 16x12"
       (is (= 16 (width buffer))
@@ -30,4 +30,7 @@
         (is (= "   Pikachu    " name))))
     (testing "it should draw the health."
       (let [health (->> (nth buffer 1) drop-last (take-last 5) (apply str))]
-        (is (= "100☗ " health))))))
+        (is (= "100☗ " health))))
+    (testing "it should draw the attack."
+      (let [health (->> (nth buffer 1) rest (take 3) (apply str))]
+        (is (= "20⚔" health))))))
