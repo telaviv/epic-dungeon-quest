@@ -16,4 +16,4 @@
   {:type :monster, :health 10, :name "Spider", :attack 3})
 
 (defn wooden-sword-card []
-  {:type :weapon, :attack 5})
+  {:type :weapon, :attack 5, :name "Wooden Sword"})

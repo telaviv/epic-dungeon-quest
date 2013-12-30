@@ -10,22 +10,22 @@
 (def card-name-row 3)
 (def card-health-row 1)
 
-(defn create-sheet [w h]
+(defn- create-sheet [w h]
   (vec (repeat h (vec (repeat w " ")))))
 
-(defn sheet-width [sheet] (count (first sheet)))
-(defn sheet-height [sheet] (count sheet))
+(defn- sheet-width [sheet] (count (first sheet)))
+(defn- sheet-height [sheet] (count sheet))
 
-(defn draw-column [sheet column char]
+(defn- draw-column [sheet column char]
   (let [height (sheet-height sheet)
         positions (for [x (range height)] [x column])]
     (reduce #(assoc-in %1 %2 char) sheet positions)))
 
-(defn draw-row [sheet row char]
+(defn- draw-row [sheet row char]
   (let [width (sheet-width sheet)]
     (assoc sheet row (vec (repeat width char)))))
 
-(defn center-string [sheet string row]
+(defn- center-string [sheet string row]
   (let [width (sheet-width sheet)
         str-width (count string)
         row-array (sheet row)
@@ -37,7 +37,7 @@
                    (map str (vec string))
                    (take-last right-padding row-array))))))
 
-(defn right-align-string [sheet string row]
+(defn- right-align-string [sheet string row]
   (let [str-width (count string)
         row-array (sheet row)]
     (assoc sheet row
@@ -45,7 +45,7 @@
                    (map str (vec string))
                    (take-last 2 row-array))))))
 
-(defn left-align-string [sheet string row]
+(defn- left-align-string [sheet string row]
   (let [str-width (count string)
         row-array (sheet row)]
     (assoc sheet row
@@ -53,11 +53,20 @@
                    (map str (vec string))
                    (drop (+ 1 str-width) row-array))))))
 
-(defn draw-card [card]
-  (-> (create-sheet card-width card-height)
+(defn- draw-card-health [sheet card]
+  (if-not (contains? card :health)
+    sheet
+    (right-align-string sheet (str (:health card) "☗") card-health-row)))
+
+(defn- draw-card-attributes [sheet card]
+  (-> sheet
       (center-string (:name card) card-name-row)
       (left-align-string (str (:attack card) "⚔") card-health-row)
-      (right-align-string (str (:health card) "☗") card-health-row)
+      (draw-card-health card)))
+
+(defn draw-card [card]
+  (-> (create-sheet card-width card-height)
+      (draw-card-attributes card)
       (draw-column card-left "│")
       (draw-column card-right "│")
       (draw-row card-top "─")

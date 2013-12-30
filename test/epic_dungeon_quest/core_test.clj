@@ -31,6 +31,8 @@
   (let [sword (wooden-sword-card)]
     (testing "is of type weapon"
       (is (= :weapon (:type sword))))
+    (testing "it should have a name"
+      (is (string? (:name sword))))
     (testing "should have a positive attack."
       (let [sword-attack (:attack sword)]
         (is (number? sword-attack))
