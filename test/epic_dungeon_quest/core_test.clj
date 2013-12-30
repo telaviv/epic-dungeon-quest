@@ -31,13 +31,7 @@
   (let [sword (wooden-sword-card)]
     (testing "is of type weapon"
       (is (= :weapon (:type sword))))
-    (testing "it should have an ability"
-      (let [sword-abilities (:abilities sword)]
-        (is (sequential? sword-abilities))
-        (is (= 1 (count sword-abilities)))))
-    (testing "it's ability should be an attack."
-      (let [[ability] (:abilities sword)]
-        (is (= :single-enemy (ability :target-type)))
-        (let [old-enemy (spider-card)
-              hit-enemy (ability old-enemy)]
-          (is (> (:health old-enemy) (:health hit-enemy))))))))
+    (testing "should have a positive attack."
+      (let [sword-attack (:attack sword)]
+        (is (number? sword-attack))
+        (is (< 0 sword-attack))))))
