@@ -36,5 +36,9 @@
             health (->> (nth healthless 1) drop-last (take-last 5) (apply str))]
         (is (= "     " health))))
     (testing "it should draw the attack."
-      (let [health (->> (nth buffer 1) rest (take 3) (apply str))]
-        (is (= "20⚔" health))))))
+      (let [attack (->> (nth buffer 1) rest (take 3) (apply str))]
+        (is (= "20⚔" attack))))
+    (testing "if it doesn't have attack, nothing should be drawn."
+      (let [attackless (draw-card (dissoc card :attack))
+            attack (->> (nth attackless 1) rest (take 3) (apply str))]
+        (is (= "   " attack))))))

@@ -9,6 +9,7 @@
 (def card-bottom (dec card-height))
 (def card-name-row 3)
 (def card-health-row 1)
+(def card-attack-row 1)
 
 (defn- create-sheet [w h]
   (vec (repeat h (vec (repeat w " ")))))
@@ -58,10 +59,15 @@
     sheet
     (right-align-string sheet (str (:health card) "☗") card-health-row)))
 
+(defn- draw-card-attack [sheet card]
+  (if-not (contains? card :attack)
+    sheet
+    (left-align-string sheet (str (:attack card) "⚔") card-attack-row)))
+
 (defn- draw-card-attributes [sheet card]
   (-> sheet
       (center-string (:name card) card-name-row)
-      (left-align-string (str (:attack card) "⚔") card-health-row)
+      (draw-card-attack card)
       (draw-card-health card)))
 
 (defn draw-card [card]
