@@ -37,3 +37,24 @@
       (let [sword-attack (:attack sword)]
         (is (number? sword-attack))
         (is (< 0 sword-attack))))))
+
+(deftest test-character
+  (let [character (character-card)]
+    (testing "is of type character"
+      (is (= :character (:type character))))
+    (testing "it should have a name"
+      (is (string? (:name character))))
+    (testing "should have positive health."
+      (let [character-health (:health character)]
+        (is (number? character-health))
+        (is (< 0 character-health))))))
+
+(deftest test-player-side
+  (println player-side)
+  (let [attack-value 10
+        character (character-card)
+        side (player-side character)]
+    (testing "attacking just a character."
+      (let [{attacked :character} (attack-player attack-value side)]
+        (is (= (:health attacked)
+               (- (:health character) attack-value)))))))
