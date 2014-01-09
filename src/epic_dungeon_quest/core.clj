@@ -20,9 +20,3 @@
 
 (defn character-card []
   {:type :character, :health 20, :name "Hero"})
-
-(defn player-side [character]
-  {:character character})
-
-(defn attack-player [attack-value side]
-  (player-side (deal-damage attack-value (:character side))))

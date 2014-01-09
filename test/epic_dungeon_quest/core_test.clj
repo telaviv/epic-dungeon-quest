@@ -48,13 +48,3 @@
       (let [character-health (:health character)]
         (is (number? character-health))
         (is (< 0 character-health))))))
-
-(deftest test-player-side
-  (println player-side)
-  (let [attack-value 10
-        character (character-card)
-        side (player-side character)]
-    (testing "attacking just a character."
-      (let [{attacked :character} (attack-player attack-value side)]
-        (is (= (:health attacked)
-               (- (:health character) attack-value)))))))
