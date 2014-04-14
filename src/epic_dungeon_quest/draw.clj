@@ -11,6 +11,8 @@
 (def card-health-row 1)
 (def card-attack-row 1)
 
+(def player-row-offset 15)
+
 (defn- create-sheet [w h]
   (vec (repeat h (vec (repeat w " ")))))
 
@@ -82,5 +84,20 @@
       (assoc-in [card-bottom card-left] "╰")
       (assoc-in [card-bottom card-right] "╯")))
 
+(defn- blit-sheet [parent child x y]
+  (let [positions (for [cx (range (sheet-width child))
+                        cy (range (sheet-height child))
+                        :let [px (+ cx x) py (+ cy y)]]
+                    [cx cy px py])]
+        (reduce (fn [sheet [cx cy px py]]
+                  (assoc-in sheet [py px]
+                            (get-in child [cy cx])))
+                parent positions)))
+
 (defn draw-enemy-side [side]
   (draw-card (first side)))
+
+(defn draw-player-side [side]
+  (-> (create-sheet card-width (+ card-height player-row-offset))
+      (blit-sheet (draw-card (first (:attack side))) 0 0)
+      (blit-sheet (draw-card (:character side)) 0 player-row-offset)))

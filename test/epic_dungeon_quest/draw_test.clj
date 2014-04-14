@@ -1,24 +1,22 @@
 (ns epic-dungeon-quest.draw-test
   (:require [clojure.test :refer :all]
-            [epic-dungeon-quest.draw :refer :all]))
+            [epic-dungeon-quest.draw :refer :all]
+            [epic-dungeon-quest.core :refer :all]))
 
 (defn width [buffer] (count (first buffer)))
 (defn height [buffer] (count buffer))
 
-(def test-card {:name "Pikachu" :health 100 :attack 20})
-
 (defn buffer-contains? [parent child x y]
   (every? (fn [[cx cy px py]]
-
-            (= (get-in child [cx cy])
-               (get-in parent [px py])))
+            (= (get-in child [cy cx])
+               (get-in parent [py px])))
           (for [cx (range (width child))
                 cy (range (height child))
                 :let [px (+ cx x) py (+ cy y)]]
             [cx cy px py])))
 
 (deftest test-draw-card
-  (let [card test-card
+  (let [card {:name "Pikachu" :health 100 :attack 20}
         buffer (draw-card card)]
     (testing "size should be 16x12"
       (is (= 16 (width buffer))
@@ -57,6 +55,20 @@
 
 (deftest test-draw-enemy-side
   (testing "a single card side should just look like the card."
-      (is (buffer-contains? (draw-enemy-side [test-card])
-                            (draw-card test-card)
+    (let [enemy (spider-card)]
+      (is (buffer-contains? (draw-enemy-side [enemy])
+                            (draw-card enemy)
+                            0 0)))))
+
+(deftest test-draw-player-side
+  (let [character (character-card)
+        sword (wooden-sword-card)
+        side {:character character :attack [sword]}]
+    (testing "player is drawn on the second row."
+      (is (buffer-contains? (draw-player-side side)
+                            (draw-card character)
+                            0 15)))
+    (testing "attack cards are on the first row."
+      (is (buffer-contains? (draw-player-side side)
+                            (draw-card sword)
                             0 0)))))
