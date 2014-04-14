@@ -5,8 +5,20 @@
 (defn width [buffer] (count (first buffer)))
 (defn height [buffer] (count buffer))
 
+(def test-card {:name "Pikachu" :health 100 :attack 20})
+
+(defn buffer-contains? [parent child x y]
+  (every? (fn [[cx cy px py]]
+
+            (= (get-in child [cx cy])
+               (get-in parent [px py])))
+          (for [cx (range (width child))
+                cy (range (height child))
+                :let [px (+ cx x) py (+ cy y)]]
+            [cx cy px py])))
+
 (deftest test-draw-card
-  (let [card {:name "Pikachu" :health 100 :attack 20}
+  (let [card test-card
         buffer (draw-card card)]
     (testing "size should be 16x12"
       (is (= 16 (width buffer))
@@ -42,3 +54,9 @@
       (let [attackless (draw-card (dissoc card :attack))
             attack (->> (nth attackless 1) rest (take 3) (apply str))]
         (is (= "   " attack))))))
+
+(deftest test-draw-enemy-side
+  (testing "a single card side should just look like the card."
+      (is (buffer-contains? (draw-enemy-side [test-card])
+                            (draw-card test-card)
+                            0 0)))))

@@ -81,3 +81,6 @@
       (assoc-in [card-top card-right] "╮")
       (assoc-in [card-bottom card-left] "╰")
       (assoc-in [card-bottom card-right] "╯")))
+
+(defn draw-enemy-side [side]
+  (draw-card (first side)))

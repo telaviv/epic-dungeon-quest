@@ -6,7 +6,7 @@
 (defn -main []
   (let [screen (ls/get-screen :text)]
     (ls/start screen)
-    (ls/put-sheet screen 0 0 (draw/draw-card (epic/spider-card)))
+    (ls/put-sheet screen 0 0 (draw/draw-enemy-side [(epic/spider-card)]))
     (ls/put-sheet screen 0 18 (draw/draw-card (epic/wooden-sword-card)))
     (ls/put-sheet screen 30 33 (draw/draw-card (epic/character-card)))
     (ls/redraw screen)
