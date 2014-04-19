@@ -5,4 +5,6 @@
   {:character character})
 
 (defn attack-player [attack-value side]
-  (player (core/deal-damage attack-value (:character side))))
+  (assoc side
+    :character (core/deal-damage attack-value
+                                 (:character side))))

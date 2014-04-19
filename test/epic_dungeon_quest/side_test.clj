@@ -6,8 +6,11 @@
 (deftest test-player-side
   (let [attack-value 10
         character (core/character-card)
-        side (player character)]
+        side {:character character :attack [(core/wooden-sword-card)]}]
     (testing "attacking just a character."
-      (let [{attacked :character} (attack-player attack-value side)]
-        (is (= (:health attacked)
-               (- (:health character) attack-value)))))))
+      (let [attacked-player-side (attack-player attack-value side)
+            {attacked-player-card :character} attacked-player-side]
+        (is (= (:health attacked-player-card)
+               (- (:health character) attack-value))
+        (is (= (dissoc side :character)
+               (dissoc attacked-player-side :character))))))))
