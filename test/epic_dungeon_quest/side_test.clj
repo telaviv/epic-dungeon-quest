@@ -14,3 +14,12 @@
                (- (:health character) attack-value))
         (is (= (dissoc side :character)
                (dissoc attacked-player-side :character))))))))
+
+(deftest test-enemy-side
+  (testing "attacking the first enemy"
+    (let [attack-value 3
+          enemy (core/spider-card)
+          side [enemy]
+          attacked-side (attack-enemy attack-value 0 side)]
+      (is (= (- (:health enemy) attack-value)
+             (:health (first attacked-side)))))))
