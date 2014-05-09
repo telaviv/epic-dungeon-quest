@@ -14,7 +14,14 @@
                                       (nth side index))))
 
 (defn select-enemy [battle-state i]
-  (assoc-in battle-state [:enemy :played i :selected] true))
+  (assoc-in (clear-enemy-selection battle-state)
+            [:enemy :played i :selected]
+            true))
+
+(defn- clear-enemy-selection [battle-state]
+  (let [enemies (get-in battle-state [:enemy :played])
+        cleared-enemies (vec (map #(assoc % :selected false) enemies))]
+    (assoc-in battle-state [:enemy :played] cleared-enemies)))
 
 (defn is-enemy-selected [battle-state]
   nil)

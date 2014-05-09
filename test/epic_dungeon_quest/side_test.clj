@@ -25,11 +25,16 @@
              (:health (first attacked-side)))))))
 
 (deftest test-select-enemy
-  (testing "selecting an enemy with no current selections"
-    (let [selected (select-enemy demo-battle-state 1)
-          enemies (get-in selected [:enemy :played])]
-      (is (:selected (nth enemies 1)))
-      (is (not (:selected (nth enemies 0)))))))
+  (let [selected (select-enemy demo-battle-state 1)]
+    (testing "selecting an enemy with no current selections"
+      (let [enemies (get-in selected [:enemy :played])]
+        (is (:selected (nth enemies 1)))
+        (is (not (:selected (nth enemies 0))))))
+    (testing "a reselection cancels any other selections."
+      (let [reselected (select-enemy selected 0)
+            enemies (get-in reselected [:enemy :played])]
+        (is (:selected (nth enemies 0)))
+        (is (not (:selected (nth enemies 1))))))))
 
 (deftest test-is-enemy-selected
   (let [battle-state demo-battle-state]
