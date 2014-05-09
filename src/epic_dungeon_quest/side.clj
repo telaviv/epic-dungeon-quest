@@ -12,3 +12,11 @@
 (defn attack-enemy [attack-value index side]
   (assoc side index (core/deal-damage attack-value
                                       (nth side index))))
+
+(defn is-enemy-selected [battle-state]
+  nil)
+
+(def demo-battle-state
+  {:enemy {:played [{:selected false :card (core/spider-card)}]}
+   :player {:player (core/character-card)
+            :weapons [{:selected false :card (core/wooden-sword-card)}]}})
