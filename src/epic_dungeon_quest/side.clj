@@ -18,13 +18,16 @@
             [:enemy :played i :selected]
             true))
 
+(defn- played-enemies [battle-state]
+  (vec (get-in battle-state [:enemy :played])))
+
 (defn- clear-enemy-selection [battle-state]
-  (let [enemies (get-in battle-state [:enemy :played])
+  (let [enemies (played-enemies battle-state)
         cleared-enemies (vec (map #(assoc % :selected false) enemies))]
     (assoc-in battle-state [:enemy :played] cleared-enemies)))
 
 (defn is-enemy-selected [battle-state]
-  nil)
+  (some :selected (played-enemies battle-state)))
 
 (def demo-battle-state
   {:enemy {:played [{:selected false :card (core/spider-card)}

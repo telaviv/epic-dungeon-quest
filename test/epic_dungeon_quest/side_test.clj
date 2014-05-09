@@ -37,6 +37,9 @@
         (is (not (:selected (nth enemies 1))))))))
 
 (deftest test-is-enemy-selected
-  (let [battle-state demo-battle-state]
-    (testing "no enemy selection"
-      (is (not (is-enemy-selected battle-state))))))
+  (testing "no enemy selection should be false"
+    (let [unselected-battle-state demo-battle-state]
+      (is (not (is-enemy-selected unselected-battle-state)))))
+    (testing "when an enemy is selected we should be true"
+      (let [selected-battle-state (select-enemy demo-battle-state 0)]
+        (is (is-enemy-selected selected-battle-state)))))
