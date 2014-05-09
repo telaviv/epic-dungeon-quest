@@ -24,7 +24,14 @@
       (is (= (- (:health enemy) attack-value)
              (:health (first attacked-side)))))))
 
+(deftest test-select-enemy
+  (testing "selecting an enemy with no current selections"
+    (let [selected (select-enemy demo-battle-state 1)
+          enemies (get-in selected [:enemy :played])]
+      (is (:selected (nth enemies 1)))
+      (is (not (:selected (nth enemies 0)))))))
+
 (deftest test-is-enemy-selected
-  (testing "no enemy selection"
-    (let [battle-state demo-battle-state]
+  (let [battle-state demo-battle-state]
+    (testing "no enemy selection"
       (is (not (is-enemy-selected battle-state))))))
