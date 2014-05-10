@@ -26,7 +26,7 @@
         cleared-enemies (vec (map #(assoc % :selected false) enemies))]
     (assoc-in battle-state [:enemy :played] cleared-enemies)))
 
-(defn is-enemy-selected [battle-state]
+(defn enemy-selected? [battle-state]
   (some :selected (played-enemies battle-state)))
 
 (def demo-battle-state
