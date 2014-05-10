@@ -53,11 +53,11 @@
             attack (->> (nth attackless 1) rest (take 3) (apply str))]
         (is (= "   " attack))))))
 
-(deftest test-draw-enemy-side
+(deftest test-draw-played-enemies
   (testing "a single card side should just look like the card."
-    (let [enemy (spider-card)]
-      (is (buffer-contains? (draw-enemy-side [enemy])
-                            (draw-card enemy)
+    (let [enemy {:card (spider-card) :selected false}]
+      (is (buffer-contains? (draw-played-enemies [enemy])
+                            (draw-card (spider-card))
                             0 0)))))
 
 (deftest test-draw-player-side

@@ -94,8 +94,8 @@
                             (get-in child [cy cx])))
                 parent positions)))
 
-(defn draw-enemy-side [side]
-  (draw-card (first side)))
+(defn draw-played-enemies [side]
+  (draw-card (:card (first side))))
 
 (defn draw-player-side [side]
   (-> (create-sheet card-width (+ card-height player-row-offset))
