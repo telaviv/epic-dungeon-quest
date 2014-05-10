@@ -13,10 +13,12 @@
   (assoc side index (core/deal-damage attack-value
                                       (nth side index))))
 
-(defn select-enemy [battle-state i]
-  (assoc-in (clear-enemy-selection battle-state)
-            [:enemy :played i :selected]
-            true))
+(defn select-enemy
+  ([battle-state] (select-enemy battle-state 0))
+  ([battle-state i]
+     (assoc-in (clear-enemy-selection battle-state)
+               [:enemy :played i :selected]
+               true)))
 
 (defn- played-enemies [battle-state]
   (vec (get-in battle-state [:enemy :played])))

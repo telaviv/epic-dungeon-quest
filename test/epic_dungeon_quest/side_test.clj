@@ -34,7 +34,11 @@
       (let [reselected (select-enemy selected 0)
             enemies (get-in reselected [:enemy :played])]
         (is (:selected (nth enemies 0)))
-        (is (not (:selected (nth enemies 1))))))))
+        (is (not (:selected (nth enemies 1))))))
+    (testing "the zero argument select-enemy defaults to 0 index."
+      (is (= (select-enemy demo-battle-state 0)
+             (select-enemy demo-battle-state))))))
+
 
 (deftest test-enemy-selected?
   (testing "no enemy selection should be false"
