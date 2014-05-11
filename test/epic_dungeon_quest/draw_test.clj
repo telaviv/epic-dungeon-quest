@@ -3,14 +3,12 @@
             [epic-dungeon-quest.draw :refer :all]
             [epic-dungeon-quest.core :refer :all]))
 
+;; Here we enable a new "is" form for testing.
+;; it allows you to ask "buffer-contains?" in an "is"
+;; and appropriately prints out a cleaned up version of the buffers.
+
 (defn width [buffer] (count (first buffer)))
 (defn height [buffer] (count buffer))
-
-(defn buffer-string [buffer]
-  (reduce (fn [string line]
-            (str string "\n" (reduce str line)))
-          ""
-          buffer))
 
 (defn buffer-contains?- [parent child x y]
   (every? (fn [[cx cy px py]]
@@ -20,6 +18,40 @@
                 cy (range (height child))
                 :let [px (+ cx x) py (+ cy y)]]
             [cx cy px py])))
+
+
+(defn buffer-string [buffer]
+  "Makes a beautified version of the buffer."
+  (reduce (fn [string line]
+            (str string "\n" (reduce str line)))
+          ""
+          buffer))
+
+(defmethod assert-expr 'buffer-contains? [msg form]
+  (println "we da best!")
+  `(let [parent# ~(nth form 1)
+         child# ~(nth form 2)
+         x# ~(nth form 3)
+         y# ~(nth form 4)]
+     (let [result# (buffer-contains?- parent# child# x# y#)]
+       (if result#
+         (do-report {:type :pass, :message ~msg,
+                     :expected parent#, :actual child#})
+         (do-report {:type :buffer-contains-fail, :message ~msg,
+                     :expected parent#, :actual child#}))
+       result#)))
+
+(defmethod report :buffer-contains-fail [m]
+  (with-test-out
+    (inc-report-counter :fail)
+    (println "\nFAIL in" (testing-vars-str m))
+    (when (seq *testing-contexts*) (println (testing-contexts-str)))
+    (when-let [message (:message m)] (println message))
+    (println "expected:" (buffer-string (:expected m)))
+    (println "to contain:" (buffer-string (:actual m)))))
+
+
+;; tests begin
 
 (deftest test-draw-card
   (let [card {:name "Pikachu" :health 100 :attack 20}
@@ -62,7 +94,7 @@
 (deftest test-draw-played-enemies
   (testing "a single card side should just look like the card."
     (let [enemy {:card (spider-card) :selected false}]
-      (is (buffer-contains?- (draw-played-enemies [enemy])
+      (is (buffer-contains? (draw-played-enemies [enemy])
                             (draw-card (spider-card))
                             0 0)))))
 
@@ -71,10 +103,10 @@
         sword (wooden-sword-card)
         side {:character character :attack [sword]}]
     (testing "player is drawn on the second row."
-      (is (buffer-contains?- (draw-player-side side)
+      (is (buffer-contains? (draw-player-side side)
                             (draw-card character)
                             0 15)))
     (testing "attack cards are on the first row."
-      (is (buffer-contains?- (draw-player-side side)
+      (is (buffer-contains? (draw-player-side side)
                             (draw-card sword)
                             0 0)))))
