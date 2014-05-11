@@ -12,7 +12,7 @@
           ""
           buffer))
 
-(defn buffer-contains? [parent child x y]
+(defn buffer-contains?- [parent child x y]
   (every? (fn [[cx cy px py]]
             (= (get-in child [cy cx])
                (get-in parent [py px])))
@@ -62,7 +62,7 @@
 (deftest test-draw-played-enemies
   (testing "a single card side should just look like the card."
     (let [enemy {:card (spider-card) :selected false}]
-      (is (buffer-contains? (draw-played-enemies [enemy])
+      (is (buffer-contains?- (draw-played-enemies [enemy])
                             (draw-card (spider-card))
                             0 0)))))
 
@@ -71,10 +71,10 @@
         sword (wooden-sword-card)
         side {:character character :attack [sword]}]
     (testing "player is drawn on the second row."
-      (is (buffer-contains? (draw-player-side side)
+      (is (buffer-contains?- (draw-player-side side)
                             (draw-card character)
                             0 15)))
     (testing "attack cards are on the first row."
-      (is (buffer-contains? (draw-player-side side)
+      (is (buffer-contains?- (draw-player-side side)
                             (draw-card sword)
                             0 0)))))
