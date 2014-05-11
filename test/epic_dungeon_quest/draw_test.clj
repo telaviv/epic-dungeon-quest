@@ -6,6 +6,12 @@
 (defn width [buffer] (count (first buffer)))
 (defn height [buffer] (count buffer))
 
+(defn buffer-string [buffer]
+  (reduce (fn [string line]
+            (str string "\n" (reduce str line)))
+          ""
+          buffer))
+
 (defn buffer-contains? [parent child x y]
   (every? (fn [[cx cy px py]]
             (= (get-in child [cy cx])
