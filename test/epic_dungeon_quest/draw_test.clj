@@ -28,7 +28,6 @@
           buffer))
 
 (defmethod assert-expr 'buffer-contains? [msg form]
-  (println "we da best!")
   `(let [parent# ~(nth form 1)
          child# ~(nth form 2)
          x# ~(nth form 3)
@@ -109,4 +108,14 @@
     (testing "attack cards are on the first row."
       (is (buffer-contains? (draw-player-side side)
                             (draw-card sword)
+                            0 0)))))
+
+(deftest test-draw-battle
+  (let [enemy {:played [{:card (spider-card) :selected false}]}
+        player {:character (character-card) :attack [(wooden-sword-card)]}
+        battle {:enemy enemy :player player}
+        drawn-battle (draw-battle battle)]
+    (testing "draws the played-enemies"
+      (is (buffer-contains? drawn-battle
+                            (draw-played-enemies (:played enemy))
                             0 0)))))

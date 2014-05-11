@@ -11,7 +11,9 @@
 (def card-health-row 1)
 (def card-attack-row 1)
 
+(def player-enemy-offset 10)
 (def player-row-offset 15)
+
 
 (defn- create-sheet [w h]
   (vec (repeat h (vec (repeat w " ")))))
@@ -101,3 +103,7 @@
   (-> (create-sheet card-width (+ card-height player-row-offset))
       (blit-sheet (draw-card (first (:attack side))) 0 0)
       (blit-sheet (draw-card (:character side)) 0 player-row-offset)))
+
+(defn draw-battle [battle-state]
+  (let [enemy (draw-played-enemies (get-in battle-state [:enemy :played]))]
+    enemy))
