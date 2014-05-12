@@ -4,10 +4,10 @@
 (defn player [character]
   {:character character})
 
-(defn attack-player [attack-value side]
-  (assoc side
-    :character (core/deal-damage attack-value
-                                 (:character side))))
+(defn attack-player [attack-value battle]
+  (update-in battle
+             [:player :player :card]
+             (partial core/deal-damage attack-value)))
 
 (defn attack-enemy [attack-value index side]
   (let [original (get-in side [index :card])
@@ -37,3 +37,12 @@
                     {:selected false :card (core/spider-card)}]}
    :player {:player (core/character-card)
             :weapons [{:selected false :card (core/wooden-sword-card)}]}})
+
+(defn battle-state [& {:as opts}]
+  (let [opts (merge {:character (core/character-card)
+                     :enemies (repeat 2 (core/spider-card))}
+                    opts)]
+    {:enemy {:played (vec (map #(assoc {:selected false} :card %)
+                               (:enemies opts)))}
+     :player {:player {:selected false :card (:character opts)}
+              :weapons [{:selected false :card (core/wooden-sword-card)}]}}))
