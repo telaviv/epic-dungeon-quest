@@ -11,7 +11,7 @@
 (def card-health-row 1)
 (def card-attack-row 1)
 
-(def player-enemy-offset 10)
+(def player-enemy-offset 6)
 (def player-row-offset 15)
 
 
@@ -105,5 +105,12 @@
       (blit-sheet (draw-card (:character side)) 0 player-row-offset)))
 
 (defn draw-battle [battle-state]
-  (let [enemy (draw-played-enemies (get-in battle-state [:enemy :played]))]
-    enemy))
+  (let [enemy (draw-played-enemies (get-in battle-state [:enemy :played]))
+        player (draw-player-side (:player battle-state))
+        width (apply max (map sheet-width [enemy player]))
+        height (+ player-enemy-offset
+                  (sheet-height enemy)
+                  (sheet-height player))]
+    (-> (create-sheet width height)
+        (blit-sheet enemy 0 0)
+        (blit-sheet player 0 (- height (sheet-height player))))))

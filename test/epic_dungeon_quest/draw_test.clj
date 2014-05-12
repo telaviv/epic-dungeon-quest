@@ -118,4 +118,8 @@
     (testing "draws the played-enemies"
       (is (buffer-contains? drawn-battle
                             (draw-played-enemies (:played enemy))
-                            0 0)))))
+                            0 0)))
+    (testing "draws the player side"
+      (is (buffer-contains? drawn-battle
+                            (draw-player-side player)
+                            0 18)))))
