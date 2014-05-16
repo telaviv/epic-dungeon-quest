@@ -8,13 +8,11 @@
 (defn -main []
   (let [screen (ls/get-screen :text)
         input-stream (input/create-input-stream screen)
-        battle-state {:enemy {:played [{:selected false :card (epic/spider-card)}]}
-                      :player {:player (epic/character-card)
-                               :weapons [{:selected false :card (epic/wooden-sword-card)}]}}
-        attacked-player (side/attack-player 3 battle-state)
+        start-battle (side/battle-state :enemies [(epic/spider-card)])
+        attacked-player (side/attack-player 3 start-battle)
         attacked-enemy (side/attack-enemy 5 0 attacked-player)]
     (ls/start screen)
-    (ls/put-sheet screen 0 0 (draw/draw-battle battle-state))
+    (ls/put-sheet screen 0 0 (draw/draw-battle start-battle))
     (ls/redraw screen)
     (nth input-stream 0)
     (ls/put-sheet screen 0 0 (draw/draw-battle attacked-player))
