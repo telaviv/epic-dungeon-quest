@@ -19,10 +19,10 @@
   (testing "attacking the first enemy"
     (let [attack-value 3
           enemy (core/spider-card)
-          side [{:card enemy}]
-          attacked-side (attack-enemy attack-value 0 side)]
+          initial-state (battle-state :enemies [enemy])
+          attacked-state (attack-enemy attack-value 0 initial-state)]
       (is (= (- (:health enemy) attack-value)
-             (get-in (first attacked-side) [:card :health]))))))
+             (get-in attacked-state [:enemy :played 0 :card :health]))))))
 
 (deftest test-select-enemy
   (let [selected (select-enemy demo-battle-state 1)]

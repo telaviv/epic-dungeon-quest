@@ -9,10 +9,10 @@
              [:player :player :card]
              (partial core/deal-damage attack-value)))
 
-(defn attack-enemy [attack-value index side]
-  (let [original (get-in side [index :card])
-        attacked (core/deal-damage attack-value original)]
-    (assoc-in side [index :card] attacked)))
+(defn attack-enemy [attack-value index battle]
+  (update-in battle
+             [:enemy :played index :card]
+             (partial core/deal-damage attack-value)))
 
 (defn- played-enemies [battle-state]
   (vec (get-in battle-state [:enemy :played])))
