@@ -6,7 +6,7 @@
 
 (defn attack-player [attack-value battle]
   (update-in battle
-             [:player :player :card]
+             [:player :character :card]
              (partial core/deal-damage attack-value)))
 
 (defn attack-enemy [attack-value index battle]
@@ -32,17 +32,14 @@
 (defn enemy-selected? [battle-state]
   (some :selected (played-enemies battle-state)))
 
-(def demo-battle-state
-  {:enemy {:played [{:selected false :card (core/spider-card)}
-                    {:selected false :card (core/spider-card)}]}
-   :player {:player (core/character-card)
-            :weapons [{:selected false :card (core/wooden-sword-card)}]}})
-
 (defn battle-state [& {:as opts}]
   (let [opts (merge {:character (core/character-card)
                      :enemies (repeat 2 (core/spider-card))}
                     opts)]
     {:enemy {:played (vec (map #(assoc {:selected false} :card %)
                                (:enemies opts)))}
-     :player {:player {:selected false :card (:character opts)}
+     :player {:character {:selected false :card (:character opts)}
               :weapons [{:selected false :card (core/wooden-sword-card)}]}}))
+
+(def demo-battle-state
+  (battle-state))
