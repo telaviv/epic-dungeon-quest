@@ -13,8 +13,6 @@
             attacked-player-card (get-in attacked-player [:player :character :card])]
         (is (= (:health attacked-player-card)
                (- (:health character) attack-value)))
-        (clojure.pprint/pprint (update-in battle [:player] dissoc :player))
-        (clojure.pprint/pprint (update-in attacked-player [:player] dissoc :player))
         (is (= (update-in battle [:player] dissoc :character)
                (update-in attacked-player [:player] dissoc :character)))))))
 

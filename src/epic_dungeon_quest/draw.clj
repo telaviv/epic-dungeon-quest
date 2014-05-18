@@ -101,8 +101,8 @@
 
 (defn draw-player-side [side]
   (-> (create-sheet card-width (+ card-height player-row-offset))
-      (blit-sheet (draw-card (first (:attack side))) 0 0)
-      (blit-sheet (draw-card (:character side)) 0 player-row-offset)))
+      (blit-sheet (draw-card (get-in side [:weapons 0 :card])) 0 0)
+      (blit-sheet (draw-card (get-in side [:character :card])) 0 player-row-offset)))
 
 (defn draw-battle [battle-state]
   (let [enemy (draw-played-enemies (get-in battle-state [:enemy :played]))

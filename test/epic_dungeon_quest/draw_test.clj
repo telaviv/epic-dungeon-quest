@@ -1,7 +1,8 @@
 (ns epic-dungeon-quest.draw-test
   (:require [clojure.test :refer :all]
             [epic-dungeon-quest.draw :refer :all]
-            [epic-dungeon-quest.core :refer :all]))
+            [epic-dungeon-quest.core :refer :all]
+            [epic-dungeon-quest.side :refer :all]))
 
 ;; Here we enable a new "is" form for testing.
 ;; it allows you to ask "buffer-contains?" in an "is"
@@ -100,26 +101,27 @@
 (deftest test-draw-player-side
   (let [character (character-card)
         sword (wooden-sword-card)
-        side {:character character :attack [sword]}]
+        side (:player (battle-state :character character :weapons [sword]))
+        drawn-side (draw-player-side side)]
     (testing "player is drawn on the second row."
-      (is (buffer-contains? (draw-player-side side)
+      (clojure.pprint/pprint (battle-state :enemies [(spider-card)]))
+      (is (buffer-contains? drawn-side
                             (draw-card character)
                             0 15)))
     (testing "attack cards are on the first row."
-      (is (buffer-contains? (draw-player-side side)
+      (is (buffer-contains? drawn-side
                             (draw-card sword)
                             0 0)))))
 
 (deftest test-draw-battle
-  (let [enemy {:played [{:card (spider-card) :selected false}]}
-        player {:character (character-card) :attack [(wooden-sword-card)]}
-        battle {:enemy enemy :player player}
+  (let [battle (battle-state :enemies [(spider-card)])
         drawn-battle (draw-battle battle)]
     (testing "draws the played-enemies"
       (is (buffer-contains? drawn-battle
-                            (draw-played-enemies (:played enemy))
+                            (draw-played-enemies
+                             (get-in battle [:enemy :played]))
                             0 0)))
     (testing "draws the player side"
       (is (buffer-contains? drawn-battle
-                            (draw-player-side player)
+                            (draw-player-side (:player battle))
                             0 18)))))

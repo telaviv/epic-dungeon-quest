@@ -32,14 +32,17 @@
 (defn enemy-selected? [battle-state]
   (some :selected (played-enemies battle-state)))
 
+(defn- selectify [card]
+  {:selected false :card card})
+
 (defn battle-state [& {:as opts}]
   (let [opts (merge {:character (core/character-card)
-                     :enemies (repeat 2 (core/spider-card))}
+                     :enemies (repeat 2 (core/spider-card))
+                     :weapons [(core/wooden-sword-card)]}
                     opts)]
-    {:enemy {:played (vec (map #(assoc {:selected false} :card %)
-                               (:enemies opts)))}
-     :player {:character {:selected false :card (:character opts)}
-              :weapons [{:selected false :card (core/wooden-sword-card)}]}}))
+    {:enemy {:played (vec (map selectify (:enemies opts)))}
+     :player {:character (selectify (:character opts))
+              :weapons (vec (map selectify (:weapons opts)))}}))
 
 (def demo-battle-state
   (battle-state))
