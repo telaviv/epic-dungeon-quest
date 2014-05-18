@@ -37,7 +37,7 @@
 
 (defn battle-state [& {:as opts}]
   (let [opts (merge {:character (core/character-card)
-                     :enemies (repeat 2 (core/spider-card))
+                     :enemies (vec (repeat 2 (core/spider-card)))
                      :weapons [(core/wooden-sword-card)]}
                     opts)]
     {:enemy {:played (vec (map selectify (:enemies opts)))}

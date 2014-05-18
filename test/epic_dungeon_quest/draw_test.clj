@@ -104,7 +104,6 @@
         side (:player (battle-state :character character :weapons [sword]))
         drawn-side (draw-player-side side)]
     (testing "player is drawn on the second row."
-      (clojure.pprint/pprint (battle-state :enemies [(spider-card)]))
       (is (buffer-contains? drawn-side
                             (draw-card character)
                             0 15)))
