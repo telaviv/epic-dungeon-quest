@@ -10,6 +10,7 @@
 (def card-name-row 3)
 (def card-health-row 1)
 (def card-attack-row 1)
+(def card-space-width 2)
 
 (def player-enemy-offset 6)
 (def player-row-offset 15)
@@ -97,7 +98,18 @@
                 parent positions)))
 
 (defn draw-played-enemies [side]
-  (draw-card (:card (first side))))
+  (let [card-count (count side)
+        width (+ (* card-width card-count)
+                 (* card-space-width (dec card-count)))
+        height card-height
+        sheet (create-sheet width height)
+        indexed (map-indexed vector side)]
+    (reduce (fn [csheet [i card]]
+              (blit-sheet csheet
+                          (draw-card (:card card))
+                          (* (+ card-width card-space-width) i)
+                          0))
+            sheet indexed)))
 
 (defn draw-player-side [side]
   (-> (create-sheet card-width (+ card-height player-row-offset))

@@ -61,9 +61,9 @@
           (= 12 (height buffer))))
     (testing "it should use unicode box corners."
       (is (= "╭" (get-in buffer [0 0])))
-      (is (= "╮" (get-in buffer [0 15]))
-      (is (= "╰" (get-in buffer [11 0]))
-      (is (= "╯" (get-in buffer [11 15]))))))
+      (is (= "╮" (get-in buffer [0 15])))
+      (is (= "╰" (get-in buffer [11 0])))
+      (is (= "╯" (get-in buffer [11 15]))))
     (testing "it should have unicode box sides."
       (let [left (for [y (range 1 11)] (get-in buffer [y 0]))
             right (for [y (range 1 11)] (get-in buffer [y 15]))
@@ -92,11 +92,16 @@
         (is (= "   " attack))))))
 
 (deftest test-draw-played-enemies
-  (testing "a single card side should just look like the card."
-    (let [enemy {:card (spider-card) :selected false}]
+  (let [enemy {:card (spider-card) :selected false}]
+    (testing "a single card side should just look like the card."
       (is (buffer-contains? (draw-played-enemies [enemy])
                             (draw-card (spider-card))
-                            0 0)))))
+                            0 0)))
+    (testing "a second enemy should be to the right of the first one."
+      (is (buffer-contains? (draw-played-enemies [enemy enemy])
+                            (draw-card (spider-card))
+                            18 0)))))
+
 
 (deftest test-draw-player-side
   (let [character (character-card)
